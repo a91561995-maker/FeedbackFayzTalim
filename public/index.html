@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAYZ TA’LIM — Taqdimot bo‘yicha fikr-mulohaza</title>
+  <style>
+    :root {
+      --primary: #0066B3;
+      --secondary: #00AEEF;
+      --bg: #F4F9FD;
+      --card: #FFFFFF;
+      --text: #1E293B;
+      --muted: #64748B;
+      --border: #E2E8F0;
+      --star: #F59E0B;
+      --danger: #EF4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      width: 100%;
+      max-width: 460px;
+      border-radius: 20px;
+      padding: 24px 24px 28px;
+      box-shadow: 0 12px 32px rgba(0, 102, 179, 0.08);
+    }
+
+    /* Переключатель языков */
+    .lang-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      background: var(--bg);
+      padding: 3px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0, 102, 179, 0.25);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .brand .fayz { color: var(--primary); }
+    .brand .talim { color: var(--secondary); }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    label.title {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 15px;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.15);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Звезды оценки */
+    .stars {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .star-btn {
+      flex: 1;
+      height: 52px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #CBD5E1;
+    }
+
+    .star-btn.active {
+      border-color: var(--star);
+      background: #FFFBEB;
+      color: var(--star);
+      transform: translateY(-2px);
+    }
+
+    .rating-hint {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--primary);
+      margin-top: 8px;
+      min-height: 18px;
+    }
+
+    /* Теги категории */
+    .tags {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .tag-btn {
+      flex: 1;
+      padding: 8px 6px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tag-btn.active {
+      border-color: var(--primary);
+      background: rgba(0, 102, 179, 0.08);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.99);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 13px;
+      margin-bottom: 12px;
+      text-align: center;
+      display: none;
+    }
+
+    /* Экран успеха */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .check-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .success-screen h2 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: var(--primary);
+    }
+
+    .success-screen p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .reset-btn {
+      padding: 12px 20px;
+      border: 1.5px solid var(--primary);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="lang-bar">
+      <div class="lang-switch">
+        <button type="button" class="lang-btn active" data-lang="uz">UZ</button>
+        <button type="button" class="lang-btn" data-lang="ru">RU</button>
+      </div>
+    </div>
+
+    <div id="formContainer">
+      <div class="header">
+        <div class="brand">
+          <span class="fayz">FAYZ</span> <span class="talim">TA’LIM</span>
+        </div>
+        <p class="subtitle" id="subtitleText"></p>
+      </div>
+
+      <form id="feedbackForm" novalidate>
+        <!-- 1. Имя ребенка -->
+        <div class="field">
+          <label class="title" for="childName" id="labelName"></label>
+          <input type="text" id="childName" />
+        </div>
+
+        <!-- 2. Оценка -->
+        <div class="field">
+          <label class="title" id="labelRating"></label>
+          <div class="stars" id="starsContainer">
+            <button type="button" class="star-btn" data-val="1">★</button>
+            <button type="button" class="star-btn" data-val="2">★</button>
+            <button type="button" class="star-btn" data-val="3">★</button>
+            <button type="button" class="star-btn" data-val="4">★</button>
+            <button type="button" class="star-btn" data-val="5">★</button>
+          </div>
+          <div class="rating-hint" id="ratingHint"></div>
+        </div>
+
+        <!-- 3. Отзыв / предложение / жалоба -->
+        <div class="field">
+          <label class="title" id="labelComment"></label>
+          <div class="tags" id="tagsContainer">
+            <button type="button" class="tag-btn active" data-tag-key="review" id="tagReview"></button>
+            <button type="button" class="tag-btn" data-tag-key="suggestion" id="tagSuggestion"></button>
+            <button type="button" class="tag-btn" data-tag-key="complaint" id="tagComplaint"></button>
+          </div>
+          <textarea id="comment"></textarea>
+        </div>
+
+        <div class="error-msg" id="errorMsg"></div>
+
+        <button type="submit" class="submit-btn" id="submitBtn"></button>
+      </form>
+    </div>
+
+    <div class="success-screen" id="successScreen">
+      <div class="check-circle">✓</div>
+      <h2 id="successTitle"></h2>
+      <p id="successText"></p>
+      <button type="button" class="reset-btn" id="resetBtn"></button>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      uz: {
+        pageTitle: 'FAYZ TA’LIM — Taqdimot bo‘yicha fikr-mulohaza',
+        subtitle: 'Taqdimotimizga tashrif buyurganingiz uchun rahmat! Taassurotlaringiz bilan o‘rtoqlashing — bu 30 soniya vaqt oladi.',
+        labelName: '1. Farzandingizning ism-familiyasi *',
+        placeholderName: 'Masalan: Alisher Karimov',
+        labelRating: '2. Taqdimot kuni qanday o‘tdi? *',
+        defaultHint: '1 dan 5 gacha baho bering',
+        hints: {
+          1: '1 — Umuman yoqmadi',
+          2: '2 — Kamchiliklar bor edi',
+          3: '3 — O‘rtacha',
+          4: '4 — Yaxshi, deyarli hammasi yoqdi',
+          5: '5 — A’lo! Hammasi super'
+        },
+        labelComment: '3. Fikr-mulohaza, taklif yoki shikoyat',
+        tags: {
+          review: 'Fikr-mulohaza',
+          suggestion: 'Taklif',
+          complaint: 'Shikoyat'
+        },
+        placeholderComment: 'Taassurotlaringiz yoki takliflaringizni yozib qoldiring...',
+        submitBtn: 'Fikr yuborish',
+        sendingBtn: 'Yuborilmoqda...',
+        errName: 'Iltimos, farzandingiz ismini kiriting.',
+        errRating: 'Iltimos, 1 dan 5 gacha baho tanlang.',
+        errSend: 'Xabarni yuborib bo‘lmadi.',
+        errServer: 'Server bilan bog‘lanishda xatolik.',
+        successTitle: 'Fikr-mulohazangiz uchun rahmat!',
+        successText: 'Xabaringiz <b>FAYZ TA’LIM</b> jamoasiga muvaffaqiyatli yetkazildi. Biz uni albatta inobatga olamiz.',
+        resetBtn: 'Yana bir fikr yuborish'
+      },
+      ru: {
+        pageTitle: 'FAYZ TA’LIM — Отзыв о презентации',
+        subtitle: 'Спасибо, что посетили нашу презентацию! Поделитесь впечатлениями — это займет 30 секунд.',
+        labelName: '1. Имя и фамилия ребенка *',
+        placeholderName: 'Например: Алишер Каримов',
+        labelRating: '2. Как прошел день презентации? *',
+        defaultHint: 'Выберите оценку от 1 до 5',
+        hints: {
+          1: '1 — Совсем не понравилось',
+          2: '2 — Были недочеты',
+          3: '3 — Нормально',
+          4: '4 — Хорошо, почти всё понравилось',
+          5: '5 — Отлично! Всё супер'
+        },
+        labelComment: '3. Отзыв, предложение или жалоба',
+        tags: {
+          review: 'Отзыв',
+          suggestion: 'Предложение',
+          complaint: 'Жалоба'
+        },
+        placeholderComment: 'Напишите ваши впечатления или пожелания...',
+        submitBtn: 'Отправить отзыв',
+        sendingBtn: 'Отправка...',
+        errName: 'Пожалуйста, введите имя ребенка.',
+        errRating: 'Пожалуйста, выберите оценку от 1 до 5.',
+        errSend: 'Не удалось отправить отзыв.',
+        errServer: 'Ошибка соединения с сервером.',
+        successTitle: 'Спасибо за ваш отзыв!',
+        successText: 'Ваше сообщение успешно передано команде <b>FAYZ TA’LIM</b>. Мы обязательно учтем его в работе.',
+        resetBtn: 'Отправить еще один отзыв'
+      }
+    };
+
+    let currentLang = 'uz';
+    let selectedRating = 0;
+    let selectedTagKey = 'review';
+
+    const langBtns = document.querySelectorAll('.lang-btn');
+    const starBtns = document.querySelectorAll('.star-btn');
+    const ratingHint = document.getElementById('ratingHint');
+    const tagBtns = document.querySelectorAll('.tag-btn');
+    const form = document.getElementById('feedbackForm');
+    const errorMsg = document.getElementById('errorMsg');
+    const submitBtn = document.getElementById('submitBtn');
+    const formContainer = document.getElementById('formContainer');
+    const successScreen = document.getElementById('successScreen');
+    const resetBtn = document.getElementById('resetBtn');
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      const t = translations[lang];
+
+      document.documentElement.lang = lang;
+      document.title = t.pageTitle;
+      document.getElementById('subtitleText').textContent = t.subtitle;
+      document.getElementById('labelName').textContent = t.labelName;
+      document.getElementById('childName').placeholder = t.placeholderName;
+      document.getElementById('labelRating').textContent = t.labelRating;
+      ratingHint.textContent = selectedRating ? t.hints[selectedRating] : t.defaultHint;
+      document.getElementById('labelComment').textContent = t.labelComment;
+
+      document.getElementById('tagReview').textContent = t.tags.review;
+      document.getElementById('tagSuggestion').textContent = t.tags.suggestion;
+      document.getElementById('tagComplaint').textContent = t.tags.complaint;
+
+      document.getElementById('comment').placeholder = t.placeholderComment;
+      submitBtn.textContent = t.submitBtn;
+      document.getElementById('successTitle').textContent = t.successTitle;
+      document.getElementById('successText').innerHTML = t.successText;
+      resetBtn.textContent = t.resetBtn;
+      errorMsg.style.display = 'none';
+    }
+
+    // Переключение языка
+    langBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        langBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyLanguage(btn.dataset.lang);
+      });
+    });
+
+    // Логика звезд
+    starBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedRating = Number(btn.dataset.val);
+        starBtns.forEach(b => {
+          b.classList.toggle('active', Number(b.dataset.val) <= selectedRating);
+        });
+        ratingHint.textContent = translations[currentLang].hints[selectedRating];
+        errorMsg.style.display = 'none';
+      });
+    });
+
+    // Логика тегов
+    tagBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tagBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedTagKey = btn.dataset.tagKey;
+      });
+    });
+
+    // Отправка формы
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const t = translations[currentLang];
+      const childName = document.getElementById('childName').value.trim();
+      const comment = document.getElementById('comment').value.trim();
+
+      if (!childName) {
+        showError(t.errName);
+        return;
+      }
+
+      if (!selectedRating) {
+        showError(t.errRating);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = t.sendingBtn;
+      errorMsg.style.display = 'none';
+
+      // Передаем в Telegram понятное название категории на обоих языках или выбранном
+      const categoryLabels = {
+        review: 'Отзыв / Fikr-mulohaza',
+        suggestion: 'Предложение / Taklif',
+        complaint: 'Жалоба / Shikoyat'
+      };
+
+      try {
+        const res = await fetch('/api/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            childName,
+            rating: selectedRating,
+            category: categoryLabels[selectedTagKey],
+            lang: currentLang.toUpperCase(),
+            comment
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+          formContainer.style.display = 'none';
+          successScreen.style.display = 'block';
+        } else {
+          showError(data.error || t.errSend);
+        }
+      } catch (err) {
+        showError(t.errServer);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = t.submitBtn;
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      form.reset();
+      selectedRating = 0;
+      starBtns.forEach(b => b.classList.remove('active'));
+      ratingHint.textContent = translations[currentLang].defaultHint;
+      successScreen.style.display = 'none';
+      formContainer.style.display = 'block';
+    });
+
+    function showError(text) {
+      errorMsg.textContent = text;
+      errorMsg.style.display = 'block';
+    }
+
+    // Инициализация языка при загрузке
+    applyLanguage(currentLang);
+  </script>
+</body>
+</html>
